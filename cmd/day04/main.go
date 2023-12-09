@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -9,14 +8,6 @@ import (
 	"strconv"
 	"strings"
 )
-
-func charIsNum(c rune) bool {
-	return c >= '0' && c <= '9'
-}
-
-func isBetween(x, y, idx int) bool {
-	return idx >= x && idx <= y
-}
 
 func toIntArr(input []string) []int {
 	arr := make([]int, len(input))
@@ -36,36 +27,6 @@ func isInList(winning []int, num int) bool {
 	}
 
 	return false
-}
-
-func printNums(arr []string) string {
-
-	buf := bytes.Buffer{}
-	buf.WriteString("[")
-	for i, s := range arr {
-		last := ", "
-		if i == len(arr)-1 {
-			last = ""
-		}
-		buf.WriteString(fmt.Sprintf("'%s'%s", s, last))
-	}
-	buf.WriteString("]")
-	return buf.String()
-}
-
-func printNumsInt(arr []int) string {
-
-	buf := bytes.Buffer{}
-	buf.WriteString("[")
-	for i, s := range arr {
-		last := ", "
-		if i == len(arr)-1 {
-			last = ""
-		}
-		buf.WriteString(fmt.Sprintf("'%d'%s", s, last))
-	}
-	buf.WriteString("]")
-	return buf.String()
 }
 
 var cardRe = regexp.MustCompile(`(\d+)`)
@@ -121,22 +82,37 @@ func partTwo(lines []string) int {
 	var sum int
 
 	m := make(map[int]Game)
+	test := make(map[int]int)
 	for x, line := range lines {
 		winning, myCards := parseLine(line)
 		m[x] = Game{ID: x, Winning: winning, Cards: myCards}
+		test[x] = 1
 	}
 
-	arr := make([][]Game, len(m))
-	for k, g := range m {
-		fmt.Printf("Game %d: %+v | %+v\n", k, printNumsInt(g.Winning), printNumsInt(g.Cards))
-		arr[k] = []Game{g}
+	for id := 0; id < len(test); id++ {
+		game := m[id]
+
+		var found int
+		for _, card := range game.Cards {
+			if isInList(game.Winning, card) {
+				found++
+			}
+		}
+
+		for i := id + 1; i <= found+id; i++ {
+			test[i] += test[id]
+		}
+	}
+
+	for id := 0; id < len(test); id++ {
+		sum += test[id]
 	}
 
 	return sum
 }
 
 func main() {
-	b, err := os.ReadFile("input/day04_test.txt")
+	b, err := os.ReadFile("input/day04.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
