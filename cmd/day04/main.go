@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"regexp"
 	"strconv"
@@ -35,33 +36,22 @@ func partOne(lines []string) int {
 	var sum int
 
 	for _, line := range lines {
-		input := strings.Split(line, ": ")[1]
-		cards := strings.Split(input, " | ")
-		cards[0] = strings.TrimSpace(cards[0])
-		cards[1] = strings.TrimSpace(cards[1])
-
-		winning := toIntArr(cardRe.FindAllString(cards[0], -1))
-		myCards := toIntArr(cardRe.FindAllString(cards[1], -1))
+		winning, myCards := parseLine(line)
 
 		var multiplier int
 		for _, i := range myCards {
 			if isInList(winning, i) {
-				if multiplier == 0 {
-					multiplier = 1
-				} else {
-					multiplier *= 2
-				}
+				multiplier++
 			}
 		}
 
-		sum += multiplier
+		sum += int(math.Pow(2, float64(multiplier)-1))
 	}
 
 	return sum
 }
 
 type Game struct {
-	ID      int
 	Winning []int
 	Cards   []int
 }
@@ -69,8 +59,6 @@ type Game struct {
 func parseLine(line string) ([]int, []int) {
 	input := strings.Split(line, ": ")[1]
 	cards := strings.Split(input, " | ")
-	cards[0] = strings.TrimSpace(cards[0])
-	cards[1] = strings.TrimSpace(cards[1])
 
 	winning := toIntArr(cardRe.FindAllString(cards[0], -1))
 	myCards := toIntArr(cardRe.FindAllString(cards[1], -1))
@@ -85,7 +73,7 @@ func partTwo(lines []string) int {
 	test := make(map[int]int)
 	for x, line := range lines {
 		winning, myCards := parseLine(line)
-		m[x] = Game{ID: x, Winning: winning, Cards: myCards}
+		m[x] = Game{Winning: winning, Cards: myCards}
 		test[x] = 1
 	}
 
