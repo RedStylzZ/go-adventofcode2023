@@ -158,38 +158,6 @@ func partTwo(content string) int {
 		}
 	}
 
-	// sum = -1
-	// for i := 0; i < len(initSeeds); i += 2 {
-	// 	fmt.Printf("---------- Init Seed %d ----------\n", initSeeds[i])
-	// 	start := initSeeds[i]
-	// 	end := start + initSeeds[i+1]
-	// 	for x := start; x < start+end; x++ {
-	// 		fmt.Printf("Seed %d\n", x)
-	// 		soil := getInfo(instr[0], x)
-	// 		fert := getInfo(instr[1], soil)
-	// 		watr := getInfo(instr[2], fert)
-	// 		ligh := getInfo(instr[3], watr)
-	// 		temp := getInfo(instr[4], ligh)
-	// 		humi := getInfo(instr[5], temp)
-	// 		loca := getInfo(instr[6], humi)
-	// 		if loca < sum || sum == -1 {
-	// 			sum = loca
-	// 		}
-	// 	}
-	// }
-	// for _, seed := range seeds {
-	// 	soil := getInfo(instr[0], seed)
-	// 	fert := getInfo(instr[1], soil)
-	// 	watr := getInfo(instr[2], fert)
-	// 	ligh := getInfo(instr[3], watr)
-	// 	temp := getInfo(instr[4], ligh)
-	// 	humi := getInfo(instr[5], temp)
-	// 	loca := getInfo(instr[6], humi)
-	// 	if loca < sum || sum == -1 {
-	// 		sum = loca
-	// 	}
-	// }
-
 	return sum
 }
 
